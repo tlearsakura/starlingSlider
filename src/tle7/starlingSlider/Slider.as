@@ -137,7 +137,7 @@ package tle7.starlingSlider
 				//trace(diffTime);
 				if(diffTime > 400){
 					targetP = list[typePos];
-				}else if(diffTime < 50){
+				}else if(diffTime < 70){
 					touched.dispatch(touch.target,this);
 				}
 			}
