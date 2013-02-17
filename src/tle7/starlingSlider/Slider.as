@@ -28,7 +28,8 @@ package tle7.starlingSlider
 		
 		private var startP:Number;
 		private var targetP:Number;
-		private var lengthMouse:Number
+		private var lengthMouse:Number;
+		private var power:Number;
 		
 		private var rect:Rectangle;
 		private var type:String;
@@ -39,11 +40,12 @@ package tle7.starlingSlider
 		
 		public var touched:Signal;
 		
-		public function Slider(rect:Rectangle,type:String,gap:Number=0)
+		public function Slider(rect:Rectangle,type:String,gap:Number=0,power:Number=0)
 		{
 			this.rect = rect;
 			this.type = type;
 			this.gap = gap;
+			this.power = power;
 			
 			mClip = new ClippedSprite();
 			this.addChild(mClip);
@@ -129,13 +131,13 @@ package tle7.starlingSlider
 		}
 		protected function dropThis():void {
 			if(draging){
-				targetP = list[typePos] + (touch[typeTouch] - startP);
+				targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
 				draging = false;
 				var diffTime:Number = getTimer()-startPressTime;
 				//trace(diffTime);
-				if(diffTime > 300){
+				if(diffTime > 400){
 					targetP = list[typePos];
-				}else if(diffTime < 100){
+				}else if(diffTime < 50){
 					touched.dispatch(touch.target,this);
 				}
 			}
