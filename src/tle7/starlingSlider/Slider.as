@@ -30,6 +30,8 @@ package tle7.starlingSlider
 		private var targetP:Number;
 		private var lengthMouse:Number;
 		private var power:Number;
+		private var _percent:Number = 0;
+		private var _pHeight:Number;
 		
 		private var rect:Rectangle;
 		private var type:String;
@@ -39,9 +41,13 @@ package tle7.starlingSlider
 		private var gap:Number;
 		
 		public var touched:Signal;
+		public var changedPosition:Signal;
 		
 		public function Slider(rect:Rectangle,type:String,gap:Number=0,power:Number=0)
 		{
+			touched = new Signal(Object,Slider);
+			changedPosition = new Signal(Number);
+			
 			this.rect = rect;
 			this.type = type;
 			this.gap = gap;
@@ -68,7 +74,6 @@ package tle7.starlingSlider
 				typeSize = 'height';
 				typeTouch = 'globalY';
 			}
-			touched = new Signal(Object,Slider);
 			
 			setSlide();
 		}
@@ -77,10 +82,22 @@ package tle7.starlingSlider
 			if(list.numChildren>0)
 				obj[typePos] = list.getChildAt(list.numChildren-1)[typePos] + list.getChildAt(list.numChildren-1)[typeSize] + gap;
 			list.addChild(obj);
+			_pHeight = list[typeSize]-rect[typeSize];
 		}
 		
 		public function get getRect():Rectangle {
 			return rect;
+		}
+		
+		public function get position():Number {
+			return _percent;
+		}
+		
+		public function set position(val:Number):void {
+			draging = false;
+			if(this.hasEventListener(Event.ENTER_FRAME)) this.removeEventListener(Event.ENTER_FRAME,dragLoop);
+			_percent = val;
+			list[typePos] = -(_percent*_pHeight);
 		}
 		
 		//////////////////////////////////////////////////////////
@@ -116,11 +133,15 @@ package tle7.starlingSlider
 			}else{
 				list[typePos] += (targetP-list[typePos])/10;
 				//trace(Math.floor(main.x),Math.floor(targetPx));
-				if(Math.floor(list[typePos])==Math.floor(targetP)){
+				if(Math.floor(list[typePos])==Math.floor(targetP) ||
+					Math.floor(list[typePos])-1==Math.floor(targetP) ||
+					Math.floor(list[typePos])+1==Math.floor(targetP)){
 					list[typePos] = targetP;
 					this.removeEventListener(Event.ENTER_FRAME,dragLoop);
 				}
 			}
+			_percent = Math.abs(list[typePos])/_pHeight*100/100;
+			changedPosition.dispatch(_percent);
 		}
 		protected function pressTag():void {
 			lengthMouse = Math.abs(list[typePos]) + touch[typeTouch];
@@ -135,9 +156,9 @@ package tle7.starlingSlider
 				draging = false;
 				var diffTime:Number = getTimer()-startPressTime;
 				//trace(diffTime);
-				if(diffTime > 400){
+				if(diffTime > 300){
 					targetP = list[typePos];
-				}else if(diffTime < 70){
+				}else if(diffTime < 80){
 					touched.dispatch(touch.target,this);
 				}
 			}

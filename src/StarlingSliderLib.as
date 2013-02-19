@@ -43,6 +43,7 @@ class Main extends starling.display.Sprite {
 		
 		slider1 = new Slider(new Rectangle(50,50,700,70),SliderType.HORIZONTAL,10,1.1);
 		slider1.touched.add(onTouchItem);
+		slider1.changedPosition.add(onChangePosition1);
 		var box:Quad;
 		for(var i:uint=1; i<=20; i++){
 			box = new Quad(50,30,Math.random()*uint.MAX_VALUE);
@@ -70,5 +71,10 @@ class Main extends starling.display.Sprite {
 	private function onTouchItem(item:Object,slider:Slider):void
 	{
 		trace(item,slider);
+	}
+	
+	private function onChangePosition1(val:Number):void
+	{
+		trace('slider1',val);
 	}
 }
