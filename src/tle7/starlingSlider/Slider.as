@@ -156,7 +156,7 @@ package tle7.starlingSlider
 				draging = false;
 				var diffTime:Number = getTimer()-startPressTime;
 				//trace(diffTime);
-				if(diffTime > 300){
+				if(diffTime > 250){
 					targetP = list[typePos];
 				}else if(diffTime < 90){
 					touched.dispatch(touch.target,this);
