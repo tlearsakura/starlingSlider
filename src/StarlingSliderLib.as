@@ -41,7 +41,7 @@ class Main extends starling.display.Sprite {
 	
 	public function Main() {
 		
-		slider1 = new Slider(new Rectangle(50,50,700,70),SliderType.HORIZONTAL,10,1.1);
+		slider1 = new Slider(new Rectangle(50,50,700,70),SliderType.HORIZONTAL,10,11);
 		slider1.touched.add(onTouchItem);
 		slider1.changedPosition.add(onChangePosition1);
 		var box:Quad;
@@ -51,7 +51,7 @@ class Main extends starling.display.Sprite {
 		}
 		this.addChild(slider1);
 		
-		slider2 = new Slider(new Rectangle(50,100,100,450),SliderType.VERTICAL,10,1.2);
+		slider2 = new Slider(new Rectangle(50,100,100,450),SliderType.VERTICAL,10,12);
 		slider2.touched.add(onTouchItem);
 		for(i=1; i<=20; i++){
 			box = new Quad(50,100,Math.random()*uint.MAX_VALUE);
@@ -59,7 +59,7 @@ class Main extends starling.display.Sprite {
 		}
 		this.addChild(slider2);
 		
-		slider3 = new Slider(new Rectangle(150,120,600,420),SliderType.HORIZONTAL,10,1.5);
+		slider3 = new Slider(new Rectangle(150,120,600,420),SliderType.HORIZONTAL,10,15);
 		slider3.touched.add(onTouchItem);
 		for(i=1; i<=10; i++){
 			box = new Quad(200,420,Math.random()*uint.MAX_VALUE);
@@ -70,11 +70,11 @@ class Main extends starling.display.Sprite {
 	
 	private function onTouchItem(item:Object,slider:Slider):void
 	{
-		trace(item,slider);
+		//trace(item,slider);
 	}
 	
 	private function onChangePosition1(val:Number):void
 	{
-		trace('slider1',val);
+		//trace('slider1',val);
 	}
 }

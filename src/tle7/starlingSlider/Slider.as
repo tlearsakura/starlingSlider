@@ -121,18 +121,23 @@ package tle7.starlingSlider
 		}
 		
 		protected function dragLoop(e:Event):void {
-			if((draging && list[typePos] > rect[typeSize]*.5) || (!draging && list[typePos] > 0)){
-				targetP = 0;
-				draging = false;
-			}else if((draging && list[typePos]+list[typeSize] < rect[typeSize]*.5) || (!draging && list[typePos]+list[typeSize] < rect[typeSize])){
-				targetP = -(list[typeSize]) + rect[typeSize];
-				draging = false;
-			}
 			if(draging){
-				list[typePos] = touch[typeTouch]-lengthMouse;
+				if(list[typePos] > 0){
+					targetP = 0;
+					list[typePos] = touch[typeTouch] - lengthMouse;
+					list[typePos] *= .5;
+				}else if(list[typePos]+list[typeSize] < rect[typeSize]){
+					targetP = -(list[typeSize]) + rect[typeSize];
+					list[typePos] = touch[typeTouch] - lengthMouse;
+					list[typePos] -=((list[typePos]+list[typeSize]) - rect[typeSize]) * .5;
+				}else list[typePos] = touch[typeTouch] - lengthMouse;
+				startPressTime = getTimer();
+				startP = touch[typeTouch];
 			}else{
-				list[typePos] += (targetP-list[typePos])/10;
-				//trace(Math.floor(main.x),Math.floor(targetPx));
+				if(list[typePos] > 0) targetP = 0;
+				else if(list[typePos]+list[typeSize] < rect[typeSize]) targetP = -(list[typeSize]) + rect[typeSize];
+				
+				list[typePos] += (targetP-list[typePos])/5;
 				if(Math.floor(list[typePos])==Math.floor(targetP) ||
 					Math.floor(list[typePos])-1==Math.floor(targetP) ||
 					Math.floor(list[typePos])+1==Math.floor(targetP)){
@@ -144,7 +149,7 @@ package tle7.starlingSlider
 			changedPosition.dispatch(_percent);
 		}
 		protected function pressTag():void {
-			lengthMouse = Math.abs(list[typePos]) + touch[typeTouch];
+			lengthMouse = touch[typeTouch] - list[typePos];
 			startPressTime = getTimer();
 			startP = touch[typeTouch];
 			draging = true;
@@ -152,15 +157,17 @@ package tle7.starlingSlider
 		}
 		protected function dropThis():void {
 			if(draging){
-				targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
 				draging = false;
 				var diffTime:Number = getTimer()-startPressTime;
 				//trace(diffTime);
-				if(diffTime > 300){
+				if(diffTime > 250){
 					targetP = list[typePos];
 				}else if(diffTime < 80){
 					touched.dispatch(touch.target,this);
+					targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
 				}
+				if(list[typePos] > 0) targetP = 0;
+				else if(list[typePos]+list[typeSize] < rect[typeSize]) targetP = -(list[typeSize]) + rect[typeSize];
 			}
 		}
 		
@@ -172,6 +179,7 @@ package tle7.starlingSlider
 			this.removeEventListener(Event.ENTER_FRAME,dragLoop);
 			this.removeChildren(0,this.numChildren-1,true);
 			mClip = null;
+			list = null;
 		}
 	}
 }
