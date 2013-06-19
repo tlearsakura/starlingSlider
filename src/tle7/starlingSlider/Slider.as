@@ -162,7 +162,7 @@ package tle7.starlingSlider
 				//trace(diffTime);
 				if(diffTime > 250){
 					targetP = list[typePos];
-				}else if(diffTime < 80){
+				}else if(diffTime < 90){
 					touched.dispatch(touch.target,this);
 					targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
 				}
