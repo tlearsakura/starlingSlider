@@ -70,7 +70,7 @@ class Main extends starling.display.Sprite {
 	
 	private function onTouchItem(item:Object,slider:Slider):void
 	{
-		//trace(item,slider);
+		trace(item,slider);
 	}
 	
 	private function onChangePosition1(val:Number):void

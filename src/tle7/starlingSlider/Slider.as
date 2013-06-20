@@ -1,5 +1,6 @@
 package tle7.starlingSlider
 {
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.getTimer;
 	
@@ -25,6 +26,7 @@ package tle7.starlingSlider
 		private var startPressTime:Number;
 		private var draging:Boolean = false;
 		private var dragItem:Boolean = false;
+		private var touchPoint:Point = new Point(), upPoint:Point = new Point();
 		
 		private var startP:Number;
 		private var targetP:Number;
@@ -151,6 +153,8 @@ package tle7.starlingSlider
 		protected function pressTag():void {
 			lengthMouse = touch[typeTouch] - list[typePos];
 			startPressTime = getTimer();
+			touchPoint.x = touch.globalX;
+			touchPoint.y = touch.globalY;
 			startP = touch[typeTouch];
 			draging = true;
 			this.addEventListener(Event.ENTER_FRAME,dragLoop);
@@ -163,7 +167,8 @@ package tle7.starlingSlider
 				if(diffTime > 250){
 					targetP = list[typePos];
 				}else if(diffTime < 90){
-					touched.dispatch(touch.target,this);
+					upPoint.x = touch.globalX; upPoint.y = touch.globalY;
+					if(Point.distance(touchPoint,upPoint) < 10) touched.dispatch(touch.target,this);
 					targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
 				}
 				if(list[typePos] > 0) targetP = 0;
