@@ -164,13 +164,13 @@ package tle7.starlingSlider
 				draging = false;
 				var diffTime:Number = getTimer()-startPressTime;
 				//trace(diffTime);
-				if(diffTime > 250){
+				/*if(diffTime > 250){
 					targetP = list[typePos];
-				}else if(diffTime < 90){
+				}else if(diffTime < 90){*/
 					upPoint.x = touch.globalX; upPoint.y = touch.globalY;
 					if(Point.distance(touchPoint,upPoint) < 10) touched.dispatch(touch.target,this);
-					targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*power);
-				}
+					targetP = (list[typePos] + (touch[typeTouch] - startP)) + ((touch[typeTouch] - startP)*(100/diffTime)*power);
+				//}
 				if(list[typePos] > 0) targetP = 0;
 				else if(list[typePos]+list[typeSize] < rect[typeSize]) targetP = -(list[typeSize]) + rect[typeSize];
 			}
